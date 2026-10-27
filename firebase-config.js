@@ -1,16 +1,14 @@
 // ============================================
 // SwiftTrust EU — shared Firebase config
-// New Firebase project (fedex-87c97)
 // ============================================
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAC8NACjLLTIkm3dvJSibvYks1xL9Oh1UM",
-  authDomain: "fedex-87c97.firebaseapp.com",
-  projectId: "fedex-87c97",
-  storageBucket: "fedex-87c97.firebasestorage.app",
-  messagingSenderId: "24830041797",
-  appId: "1:24830041797:web:a6f4f1047d657c345fdaac",
-  measurementId: "G-H2F9P45C8H"
+  apiKey: "AIzaSyAMucqvSoBlUo5jn5Pu4ClQIGRlInu55mQ",
+  authDomain: "project-app-259f2.firebaseapp.com",
+  projectId: "project-app-259f2",
+  storageBucket: "project-app-259f2.firebasestorage.app",
+  messagingSenderId: "389607996830",
+  appId: "1:389607996830:web:a9e456c60e4608f1a9ea8f"
 };
 
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
@@ -19,12 +17,13 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 // SwiftTrust EU admin
-const STB_ADMIN_EMAIL = 'greatj656@gmail.com'; 
+const STB_ADMIN_EMAIL = 'enjoygfd42@gmail.com';
 
 // ---------------------------------------------
 // Helpers shared by all pages
 // ---------------------------------------------
 
+// Money formatter — Spanish/European format: 1234.5 -> "1.234,50 €"
 function stbMoney(n) {
   return Number(n || 0).toLocaleString('es-ES', {
     style: 'currency',
@@ -34,6 +33,7 @@ function stbMoney(n) {
   });
 }
 
+// Date formatter — English text, European format: "15 Oct 2026, 14:32"
 function stbDate(ts) {
   if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -43,18 +43,21 @@ function stbDate(ts) {
   });
 }
 
+// 12-digit account number (demo-friendly for EU)
 function stbGenAccountNumber() {
   let s = '';
   for (let i = 0; i < 12; i++) s += Math.floor(Math.random() * 10);
   return s;
 }
 
+// 9-digit routing number for display purposes
 function stbGenRoutingNumber() {
   let s = '';
   for (let i = 0; i < 9; i++) s += Math.floor(Math.random() * 10);
   return s;
 }
 
+// Transfer reference like STBEU-20261015-4821
 function stbGenReference() {
   const d = new Date();
   const y = d.getFullYear();
@@ -64,10 +67,12 @@ function stbGenReference() {
   return `STBEU-${y}${m}${day}-${r}`;
 }
 
+// Simple PIN hash (demo only — NOT production-grade)
 function stbHashPin(pin) {
-  return btoa('stbeu$' + pin + '$2026'); 
+  return btoa('stbph$' + pin + '$2026');
 }
 
+// Toast notifications
 function stbToast(msg, type) {
   let el = document.getElementById('stb-toast');
   if (!el) {
@@ -81,6 +86,7 @@ function stbToast(msg, type) {
   el._t = setTimeout(() => { el.className = 'stb-toast'; }, 2800);
 }
 
+// Redirect to login if not signed in
 function stbRequireAuth() {
   return new Promise((resolve) => {
     const unsub = auth.onAuthStateChanged((user) => {
